@@ -7,6 +7,7 @@ import { WebinarWithPresenter } from '@/lib/type';
 import { cn } from '@/lib/utils';
 import { vapi } from '@/lib/vapi/vapiClient';
 import { CallStatusEnum } from '@prisma/client';
+import { Vapi } from '@vapi-ai/server-sdk';
 import { BotIcon, CheckCircle, Clock, Loader2, Mic, MicOff, PhoneOff } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner';
@@ -39,7 +40,7 @@ const AutoConnectCall = ({
     const [callStatus, setCallStatus] = useState(CallStatus.CONNECTING);
     const [assistantIsSpeaking, setAssistantIsSpeaking] = useState(false);
     const [userIsSpeaking, setUserIsSpeaking] = useState(false);
-    const [isMicMuted, setIsMicMuted] = useState(true);
+    const [isMicMuted, setIsMicMuted] = useState(false);
     const [timeRemaining, setTimeRemaining] = useState(callTimeLimit);
     const refs = useRef({
         audioStream: null as MediaStream | null,
@@ -76,7 +77,9 @@ const AutoConnectCall = ({
             refs.current.audioStream = stream;
 
             // Simple Speech Detection using AudioContext
-            const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+            stream.getAudioTracks().forEach(track => track.enabled = !isMicMuted);
+
+            const audioContext = new (window.AudioContext || window.AudioContext)();
             const analyser = audioContext.createAnalyser();
             analyser.fftSize = 256;
 
@@ -122,10 +125,8 @@ const AutoConnectCall = ({
     const toggleMicMute = () => {
         if(refs.current.audioStream){
             refs.current.audioStream.getAudioTracks().forEach(track => track.enabled = !isMicMuted);
-setIsMicMuted(prev => !prev);
-
+            setIsMicMuted(!isMicMuted);
         }
-
     }
 
     const checkoutLink = async() => {
@@ -185,10 +186,12 @@ setIsMicMuted(prev => !prev);
 
 
   useEffect(() => {
+
+
         const onCallStart = async () => {
+            // setupAudio(); 
             console.log("call Started");
             setCallStatus(CallStatus.ACTIVE);
-            setupAudio();
 
             setTimeRemaining(callTimeLimit);
 
@@ -243,15 +246,20 @@ setIsMicMuted(prev => !prev);
 
     // TODO:VAPI CALL
     useEffect(() => {
+        const initializeAudio = async () => {
+            await setupAudio();
+            startCall();
+        }
+        
         const timer = setTimeout(() => {
-          startCall(); // deferred to avoid setState during render
+            initializeAudio();
         }, 0);
-      
+        
         return () => {
-          clearTimeout(timer);
-          stopCall();
+            clearTimeout(timer);
+            stopCall();
         };
-      }, []);
+    }, []);
       
 
     return (

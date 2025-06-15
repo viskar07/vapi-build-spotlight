@@ -1,4 +1,7 @@
 // app/api/stripe/webhook/route.ts
+
+export const dynamic = "force-dynamic"; // ⬅️ Add this
+
 import { changeAttendeeType } from "@/actions/attendance";
 import { updateSubscription } from "@/actions/stripe";
 import { stripe } from "@/lib/stripe";

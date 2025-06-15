@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { getAllAttendeesWithWebinar } from '@/actions/attendance';
 import { onAuthenticatedUser } from '@/actions/auth';
 import { getAllProductsFromStripe } from '@/actions/stripe';

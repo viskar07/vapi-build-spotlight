@@ -4,13 +4,13 @@ import AttendeeCallTable from '../_components/AttendeeCallTable'
 import { dummyAttendeeWithResponse } from '../_test/testdata'
 
 type Props = {
-    params: {
+    params: Promise< {
       callId: string
-    }
+    }>
   }
 
 const Page = async ({ params }: Props) => {
-  const { callId } =  params
+  const { callId } =  await params
   const attendeeWithResponse = await getAttendeesWithResponseByCallId(callId)
 
   return (

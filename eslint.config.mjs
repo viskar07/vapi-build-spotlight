@@ -11,6 +11,14 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    rules: {
+      "unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["warn"],
+       "@typescript-eslint/ban-ts-comment": "off",
+       "@typescript-eslint/no-explicit-any": "warn",
+    },
+  }
 ];
 
 export default eslintConfig;

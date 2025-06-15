@@ -12,7 +12,7 @@ const page = async() => {
          
 
         {/* Get All The calls  */}
-        <CallList calls={dummyCalls} />  
+        <CallList calls={calls} />  
         
 
 

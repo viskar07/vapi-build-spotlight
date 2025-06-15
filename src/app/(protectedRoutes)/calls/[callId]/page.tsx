@@ -11,12 +11,12 @@ type Props = {
 
 const Page = async ({ params }: Props) => {
   const { callId } =  params
-//   const attendeeWithResponse = await getAttendeesWithResponseByCallId(callId)
+  const attendeeWithResponse = await getAttendeesWithResponseByCallId(callId)
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Call Responses</h1>
-      <AttendeeCallTable data={dummyAttendeeWithResponse} />
+      <AttendeeCallTable data={attendeeWithResponse} />
     </div>
   )
 }

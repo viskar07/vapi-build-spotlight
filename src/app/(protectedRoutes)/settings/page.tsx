@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { onAuthenticatedUser, } from '@/actions/auth'
 import { getStripeOauthLink } from '@/lib/stripe/utils'
 import { LucideAlertCircle, LucideArrowRight, LucideCheckCircle2, StarIcon } from 'lucide-react'
